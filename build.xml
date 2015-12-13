@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="buildr" default="build">
+
+    <property name="version" value="0.1.0"/>
+
+    <!-- By default, we assume all tools to be on the $PATH -->
+    <!-- <property name="toolsdir" value=""/> -->
+
+    <!-- Uncomment if you use composer for build tool downloading -->
+    <property name="toolsdir" value="${basedir}/vendor/bin/"/>
+
+    <!-- Set buildId and VCS type passed by phabricator, harbormaster application -->
+    <property name="buildId" value="${harbormaster_build_id}"/>
+    <property name="vcsType" value="${harbormaster_vcs_type}"/>
+
+    <!-- Where tools store output files -->
+    <property name="buildOutputPath" value="${basedir}/build/output"/>
+
+    <!-- Detect OS family to call the proper executable -->
+    <condition property="binaryExtension" value=".bat">
+        <os family="windows"/>
+    </condition>
+
+    <condition property="binaryExtension" value="">
+        <os family="unix"/>
+    </condition>
+
+    <!-- Start message -->
+    <echo message="Started building ${ant.project.name}! Build ID on phabricator: ${buildId}" level="info"/>
+
+    <!-- Target for travisCI builds -->
+    <target name="travis"
+            depends="clean,prepare,composer,lint,phpunit,phpcs"
+            description=""/>
+
+    <!-- Target for default build configuration -->
+    <target name="build"
+            depends="clean,prepare,composer,lint,phpunit,phpcs,phpcpd,phploc,pdepend,documentation,changelog,artifact"
+            description=""/>
+
+    <!-- Clean all previous build in workspace -->
+    <target name="clean"
+            unless="clean.done"
+            description="Cleanup build artifacts">
+
+        <echo message="Cleaning out build output directories" level="info"/>
+
+        <delete quiet="true" file="${basedir}/composer.lock"/>
+        <delete quiet="true" dir="${basedir}/vendor"/>
+        <delete quiet="true" dir="${buildOutputPath}"/>
+        <property name="clean.done" value="true"/>
+
+        <echo message="Finished cleaning output directories with result: ${clean.done}" level="info"/>
+    </target>
+
+    <!-- Make all output sub directory for tools -->
+    <target name="prepare"
+            unless="prepare.done"
+            description="Prepare for build">
+
+        <echo message="Make sub directories for build" level="info"/>
+
+        <mkdir dir="${buildOutputPath}/logs"/>
+        <mkdir dir="${buildOutputPath}/changelogs"/>
+        <mkdir dir="${buildOutputPath}/coverage"/>
+        <mkdir dir="${buildOutputPath}/pdepend"/>
+        <mkdir dir="${buildOutputPath}/release"/>
+        <mkdir dir="${buildOutputPath}/doc"/>
+        <property name="prepare.done" value="true"/>
+
+        <echo message="Finished making sub directories with result: ${prepare.done}"/>
+    </target>
+
+    <!-- Install composer dependencies and generating autoloader -->
+    <target name="composer"
+            description="Installing dependencies and generating autoloader">
+
+        <echo message="Start dependency installing using composer" level="info"/>
+
+        <condition property="composer.command" value="update" else="install">
+            <available file="${basedir}/composer.lock"/>
+        </condition>
+
+        <echo message="Running the following sub-command: ${composer.command}" level="info"/>
+
+        <exec executable="composer${binaryExtension}">
+            <arg value="${composer.command}"/>
+            <arg value="--no-interaction"/>
+            <arg value="--optimize-autoloader"/>
+            <arg value="--dev"/>
+        </exec>
+
+        <echo message="Finished installing dependencies" level="info"/>
+    </target>
+
+    <!-- Linting PHP syntax using PHP build-in parser -->
+    <target name="lint" description="Perform syntax check of sourcecode files">
+        <echo message="Run syntax checking on source and tests" level="info"/>
+
+        <exec executable="bash" failonerror="true">
+            <arg value="-c"/>
+            <arg value="find ./src -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l"/>
+        </exec>
+
+        <exec executable="bash" failonerror="true">
+            <arg value="-c"/>
+            <arg value="find ./tests -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l"/>
+        </exec>
+
+        <echo message="Finished PHP syntax checking" level="info"/>
+    </target>
+
+    <!-- Unit testing -->
+    <target name="phpunit"
+            depends="composer"
+            description="Run unit tests with PHPUnit">
+
+        <echo message="Started unit testing using PHPUnit" level="info"/>
+
+        <exec executable="${toolsdir}phpunit${binaryExtension}" failonerror="true">
+            <arg value="--configuration"/>
+            <arg path="${basedir}/build/phpunit-ci.xml"/>
+        </exec>
+
+        <echo message="Finished unit testing" level="info"/>
+    </target>
+
+    <!-- Changelog generation target -->
+    <target depends="prepare" name="changelog">
+        <echo message="Generating general changelog..." level="info"/>
+        <exec executable="bash" failonerror="true">
+            <arg value="-c"/>
+            <arg value="git log --pretty=format:'* %H: %s%n'"/>
+            <redirector output="${buildOutputPath}/changelogs/general"/>
+        </exec>
+
+        <echo message="Generating full changelog..." level="info"/>
+        <exec executable="bash" output="${buildOutputPath}/changelogs/full" failonerror="true">
+            <arg value="-c"/>
+            <arg value="git log --pretty=format:'Commit: %H%nAuthor: %an &#60;%ae&#62;%nDate: %ai%n%n%s%n%b----------------%n'"/>
+            <redirector output="${buildOutputPath}/changelogs/full"/>
+        </exec>
+    </target>
+
+    <!-- Duplicated code finding -->
+    <target name="phpcpd"
+            depends="composer">
+
+        <echo message="Started duplicated code finding" level="info"/>
+
+        <exec executable="${toolsdir}phpcpd${binaryExtension}">
+            <arg value="--log-pmd"/>
+            <arg path="${buildOutputPath}/logs/pmd-cpd.xml"/>
+            <arg path="${basedir}/src"/>
+        </exec>
+
+        <echo message="Finished checking for duplicated code" level="info"/>
+    </target>
+
+    <!-- Coding standard checks -->
+    <target name="phpcs">
+        <echo message="Copying standard definiton to actual PHPCS install..." level="info"/>
+        <mkdir dir="${basedir}/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/BuildrStandard"/>
+
+        <copy todir="${basedir}/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/BuildrStandard">
+            <fileset dir="${basedir}/build/BuildrStandard"/>
+        </copy>
+
+        <echo message="Started Coding standard checks" level="info"/>
+
+        <exec executable="${toolsdir}phpcs${binaryExtension}">
+            <arg value="--report=checkstyle"/>
+            <arg value="--report-file=${buildOutputPath}/logs/checkstyle.xml"/>
+            <arg value="--standard=BuildrStandard"/>
+            <arg value="-p"/>
+            <arg path="${basedir}/src"/>
+        </exec>
+    </target>
+
+    <!-- Software metrics -->
+    <target name="pdepend">
+        <exec executable="${toolsdir}pdepend${binaryExtension}">
+            <arg value="--jdepend-xml=${buildOutputPath}/pdepend/jdepend.xml"/>
+            <arg value="--jdepend-chart=${buildOutputPath}/pdepend/dependencies.svg"/>
+            <arg value="--overview-pyramid=${buildOutputPath}/pdepend/overview-pyramid.svg"/>
+            <arg path="${basedir}/src"/>
+        </exec>
+    </target>
+
+    <!-- Project size measurement -->
+    <target name="phploc"
+            depends="composer">
+
+        <echo message="Started project size measurement" level="info"/>
+
+        <exec executable="${toolsdir}phploc${binaryExtension}">
+            <arg value="--count-tests"/>
+            <arg value="--log-csv"/>
+            <arg path="${buildOutputPath}/logs/phploc.csv"/>
+            <arg value="--log-xml"/>
+            <arg path="${buildOutputPath}/logs/phploc.xml"/>
+            <arg path="${basedir}/src"/>
+            <arg path="${basedir}/tests"/>
+        </exec>
+
+        <echo message="Finished project size measurement" level="info"/>
+    </target>
+
+    <!-- Documentation generation -->
+    <target name="documentation" description="Generate documentation for this build">
+        <exec executable="${toolsdir}apigen${binaryExtension}">
+            <arg value="generate"/>
+            <arg value="--source"/>
+            <arg path="${basedir}/src/"/>
+            <arg value="--destination"/>
+            <arg path="${buildOutputPath}/doc"/>
+            <arg value="--deprecated"/>
+            <arg value="--todo"/>
+            <arg value="--tree"/>
+            <arg value="--template-theme=bootstrap"/>
+        </exec>
+    </target>
+
+    <!-- Artifact creation -->
+    <target name="artifact" description="Archive current build as artifact">
+        <echo message="Started archiving current release" level="info"/>
+
+        <zip destfile="${buildOutputPath}/release/${ant.project.name}-${version}.${harbormaster_vcs_type}-${harbormaster_build_id}.zip"
+             basedir="."
+             excludes="**/vendor/**,**/build/**,**/cache.properties"
+                />
+
+        <zip destfile="${buildOutputPath}/release/${ant.project.name}-doc-${version}.${harbormaster_vcs_type}-${harbormaster_build_id}.zip"
+             basedir="${buildOutputPath}/doc"
+                />
+
+        <echo message="Finished release artifact creation!" level="info"/>
+    </target>
+</project>

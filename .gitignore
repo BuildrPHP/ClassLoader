@@ -1,0 +1,12 @@
+# IntelliJ IDE project files
+.idea/
+
+# GITExtension merge origin files
+*.orig
+
+# Composer vendor folder and lock files
+vendor/
+composer.lock
+
+# Build Process output files
+build/output/*

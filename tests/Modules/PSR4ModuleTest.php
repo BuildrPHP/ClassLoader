@@ -1,7 +1,7 @@
 <?php namespace BuildR\ClassLoader\Tests\Modules;
 
 use BuildR\ClassLoader\ClassLoaderRegistry;
-use BuildR\ClassLoader\Modules\PSR4ClassLoaderModule;
+use BuildR\ClassLoader\Modules\PSR4\PSR4ClassLoaderModule;
 use BuildR\ClassLoader\Tests\Fixtures\DummyNamespace\DummyClass;
 use BuildR\ClassLoader\Tests\Fixtures\AnotherDummyNamespace\AnotherDummyClass;
 
@@ -13,14 +13,14 @@ class PSR4ModuleTest extends \PHPUnit_Framework_TestCase {
     private $registry;
 
     /**
-     * @type \BuildR\ClassLoader\Modules\PSR4ClassLoaderModule
+     * @type \BuildR\ClassLoader\Modules\PSR4\PSR4ClassLoaderModule
      */
     private $PSR4Module;
 
     public function setUp() {
         $this->registry = ClassLoaderRegistry::create();
         $this->PSR4Module = $this->registry->loadModule(
-            __DIR__ . DIRECTORY_SEPARATOR . '../../src/Modules/PSR4ClassLoaderModule.php',
+            __DIR__ . DIRECTORY_SEPARATOR . '../../src/Modules/PSR4/PSR4ClassLoaderModule.php',
             PSR4ClassLoaderModule::class
         );
 
@@ -48,7 +48,7 @@ class PSR4ModuleTest extends \PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException \BuildR\ClassLoader\Modules\PSR4ModuleException
+     * @expectedException \BuildR\ClassLoader\Modules\PSR4\PSR4ModuleException
      * @expectedExceptionMessage This namespace (Test\Namespace) is already registered!
      */
     public function testItThrowsExceptionWhenTryToRegisterSameNamespaceTwice() {

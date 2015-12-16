@@ -1,6 +1,8 @@
-<?php namespace BuildR\ClassLoader\Modules;
+<?php namespace BuildR\ClassLoader\Modules\PSR4;
 
-class PSR4ClassLoaderModule extends AbstractClassLoaderModule{
+use BuildR\ClassLoader\Modules\AbstractClassLoaderModule;
+
+class PSR4ClassLoaderModule extends AbstractClassLoaderModule {
 
     private $registeredNamespaces = [];
 
@@ -71,7 +73,7 @@ class PSR4ClassLoaderModule extends AbstractClassLoaderModule{
      * @param string $namespace The namespace name
      * @param string $basePath Tha namespace base path
      *
-     * @throws \BuildR\ClassLoader\Modules\PSR4ModuleException
+     * @throws \BuildR\ClassLoader\Modules\PSR4\PSR4ModuleException
      */
     public function registerNamespace($namespace, $basePath) {
         if($this->namespaceIsRegistered($namespace)) {

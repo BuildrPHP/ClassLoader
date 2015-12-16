@@ -1,4 +1,4 @@
-<?php namespace BuildR\ClassLoader\Modules;
+<?php namespace BuildR\ClassLoader\Modules\PSR4;
 
 use \Exception;
 

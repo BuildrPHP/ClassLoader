@@ -158,6 +158,7 @@
         </if>
 
         <exec passthru="true" executable="${toolsdir}phpunit${binaryExtension}" checkreturn="true">
+            <arg value="--colors=auto" />
             <arg value="--configuration"/>
             <arg path="${project.basedir}/${phpunit.configFile}"/>
         </exec>

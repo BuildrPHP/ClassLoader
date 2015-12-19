@@ -36,7 +36,7 @@ class ModuleException extends Exception {
         return new self(self::MESSAGE_MODULE_INVALID, $moduleClass);
     }
 
-    public function __construct($message = "", $className, $code = 0, Exception $previous = null) {
+    public function __construct($message = "", $className, $code = 0, Exception $previous = NULL) {
         $this->moduleClass = $className;
 
         parent::__construct($message, $code, $previous);

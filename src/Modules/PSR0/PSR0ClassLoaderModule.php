@@ -75,7 +75,7 @@ class PSR0ClassLoaderModule extends AbstractClassLoaderModule {
 
         //Loop through registered namespaces
         foreach($this->registeredNamespaces as $singleNamespace) {
-            $prefix = str_replace('\\', DIRECTORY_SEPARATOR, $singleNamespace[0]);
+            $prefix = $singleNamespace[0];
             $basePath = $singleNamespace[1];
 
             $pos = stripos($normalizedClass, $prefix);
@@ -107,7 +107,7 @@ class PSR0ClassLoaderModule extends AbstractClassLoaderModule {
         }
 
         $this->registeredNamespaces[] = [
-            $namespace,
+            str_replace('\\', DIRECTORY_SEPARATOR, $namespace),
             realpath($basePath)
         ];
     }

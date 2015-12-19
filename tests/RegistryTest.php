@@ -1,4 +1,4 @@
-<?php namespace Buildr\ClassLoader\Tests;
+<?php namespace BuildR\ClassLoader\Tests;
 
 use BuildR\ClassLoader\ClassLoaderRegistry;
 use BuildR\ClassLoader\Exception\ModuleException;

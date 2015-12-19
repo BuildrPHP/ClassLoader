@@ -16,6 +16,7 @@ php:
 before_install:
   - sudo apt-get update -qq
   - composer self-update
+  - composer install
 
 script:
  - ./vendor/bin/phing -f build.xml travis

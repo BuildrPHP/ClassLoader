@@ -68,7 +68,7 @@ Modules will be retrieved any time by calling the registry `getModuleByName($mod
 
 Modules can be removed from the loader stack by calling the registry (`ClassLoaderRegistry::removeModuleByName($moduleName)`) method.
 
-When removeing a module the stack will be re-sorted.
+When removing a module the stack will be re-sorted.
 
 ## ToDo
 

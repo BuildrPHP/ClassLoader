@@ -74,12 +74,12 @@ class PSR0ClassLoaderModule extends AbstractClassLoaderModule {
         $normalizedClass .= str_replace('_', DIRECTORY_SEPARATOR, $className);
 
         //Loop through registered namespaces
-        foreach ($this->registeredNamespaces as $singleNamespace) {
+        foreach($this->registeredNamespaces as $singleNamespace) {
             $prefix = $singleNamespace[0];
             $basePath = $singleNamespace[1];
 
             $pos = stripos($normalizedClass, $prefix);
-            if ($pos === false || $pos > 1) {
+            if($pos === FALSE || $pos > 1) {
                 continue;
             }
 

@@ -66,4 +66,10 @@ class PSR4ModuleTest extends \PHPUnit_Framework_TestCase {
         $this->assertFalse($this->PSR4Module->load(AnotherDummyClass::class));
     }
 
+    public function testIsReturningFalseWhenNoNamespaceRegistered() {
+        $r = $this->PSR4Module->load('NonExistingVendor\\Namespace\\ClassName');
+
+        $this->assertFalse($r);
+    }
+
 }

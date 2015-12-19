@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="buildr" default="build">
+<project name="BuildR - ClassLoader" default="build">
 
     <property name="version" value="0.1.0"/>
 
@@ -7,14 +7,14 @@
     <!-- <property name="toolsdir" value=""/> -->
 
     <!-- Uncomment if you use composer for build tool downloading -->
-    <property name="toolsdir" value="${basedir}/vendor/bin/"/>
+    <property name="toolsdir" value="${project.basedir}/vendor/bin/"/>
 
     <!-- Set buildId and VCS type passed by phabricator, harbormaster application -->
     <property name="buildId" value="${harbormaster_build_id}"/>
     <property name="vcsType" value="${harbormaster_vcs_type}"/>
 
     <!-- Where tools store output files -->
-    <property name="buildOutputPath" value="${basedir}/build/output"/>
+    <property name="buildOutputPath" value="${project.basedir}/build/output"/>
 
     <!-- Detect OS family to call the proper executable -->
     <condition property="binaryExtension" value=".bat">
@@ -25,12 +25,34 @@
         <os family="unix"/>
     </condition>
 
+    <!-- Detect run mode (Standalone or Phabricator)-->
+    <if>
+        <isset property="${harbormaster_build_id}" />
+        <then>
+            <property name="runMode" value="BUILD_SYSTEM" />
+        </then>
+
+        <else>
+            <property name="runMode" value="STANDALONE" />
+        </else>
+    </if>
+
     <!-- Start message -->
-    <echo message="Started building ${ant.project.name}! Build ID on phabricator: ${buildId}" level="info"/>
+    <if>
+        <equals arg1="${runMode}" arg2="STANDALONE" />
+
+        <then>
+            <echo message="Started building ${phing.project.name}!" level="info"/>
+        </then>
+
+        <else>
+            <echo message="Started building ${phing.project.name}! Build ID on phabricator: ${buildId}" level="info"/>
+        </else>
+    </if>
 
     <!-- Target for travisCI builds -->
     <target name="travis"
-            depends="clean,prepare,composer,lint,phpunit,phpcs"
+            depends="clean,prepare,composer,lint,phpunit,phpcs,phploc,phpcpd"
             description=""/>
 
     <!-- Target for default build configuration -->
@@ -45,8 +67,6 @@
 
         <echo message="Cleaning out build output directories" level="info"/>
 
-        <delete quiet="true" file="${basedir}/composer.lock"/>
-        <delete quiet="true" dir="${basedir}/vendor"/>
         <delete quiet="true" dir="${buildOutputPath}"/>
         <property name="clean.done" value="true"/>
 
@@ -77,9 +97,18 @@
 
         <echo message="Start dependency installing using composer" level="info"/>
 
-        <condition property="composer.command" value="update" else="install">
-            <available file="${basedir}/composer.lock"/>
+        <condition property="composer.command" value="update">
+            <available property="composer.command" file="${project.basedir}/composer.lock"/>
         </condition>
+
+        <if>
+            <not>
+                <isset property="composer.command" />
+            </not>
+            <then>
+                <property name="composer.command" value="install" />
+            </then>
+        </if>
 
         <echo message="Running the following sub-command: ${composer.command}" level="info"/>
 
@@ -97,12 +126,12 @@
     <target name="lint" description="Perform syntax check of sourcecode files">
         <echo message="Run syntax checking on source and tests" level="info"/>
 
-        <exec executable="bash" failonerror="true">
+        <exec passthru="true" executable="bash" checkreturn="true">
             <arg value="-c"/>
             <arg value="find ./src -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l"/>
         </exec>
 
-        <exec executable="bash" failonerror="true">
+        <exec passthru="true" executable="bash" checkreturn="true">
             <arg value="-c"/>
             <arg value="find ./tests -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l"/>
         </exec>
@@ -117,9 +146,20 @@
 
         <echo message="Started unit testing using PHPUnit" level="info"/>
 
-        <exec executable="${toolsdir}phpunit${binaryExtension}" failonerror="true">
+        <if>
+            <equals arg1="BUILD_SYSTEM" arg2="${runMode}"/>
+            <then>
+                <property name="phpunit.configFile" value="phpunit-ci.xml" />
+            </then>
+
+            <else>
+                <property name="phpunit.configFile" value="phpunit.xml" />
+            </else>
+        </if>
+
+        <exec passthru="true" executable="${toolsdir}phpunit${binaryExtension}" checkreturn="true">
             <arg value="--configuration"/>
-            <arg path="${basedir}/build/phpunit-ci.xml"/>
+            <arg path="${project.basedir}/${phpunit.configFile}"/>
         </exec>
 
         <echo message="Finished unit testing" level="info"/>
@@ -128,17 +168,15 @@
     <!-- Changelog generation target -->
     <target depends="prepare" name="changelog">
         <echo message="Generating general changelog..." level="info"/>
-        <exec executable="bash" failonerror="true">
+        <exec executable="bash" checkreturn="true" output="${buildOutputPath}/changelogs/general">
             <arg value="-c"/>
             <arg value="git log --pretty=format:'* %H: %s%n'"/>
-            <redirector output="${buildOutputPath}/changelogs/general"/>
         </exec>
 
         <echo message="Generating full changelog..." level="info"/>
-        <exec executable="bash" output="${buildOutputPath}/changelogs/full" failonerror="true">
+        <exec executable="bash" checkreturn="true" output="${buildOutputPath}/changelogs/full">
             <arg value="-c"/>
             <arg value="git log --pretty=format:'Commit: %H%nAuthor: %an &#60;%ae&#62;%nDate: %ai%n%n%s%n%b----------------%n'"/>
-            <redirector output="${buildOutputPath}/changelogs/full"/>
         </exec>
     </target>
 
@@ -148,10 +186,9 @@
 
         <echo message="Started duplicated code finding" level="info"/>
 
-        <exec executable="${toolsdir}phpcpd${binaryExtension}">
-            <arg value="--log-pmd"/>
-            <arg path="${buildOutputPath}/logs/pmd-cpd.xml"/>
-            <arg path="${basedir}/src"/>
+        <exec passthru="true" executable="${toolsdir}phpcpd${binaryExtension}">
+            <arg value="--log-pmd=${buildOutputPath}/logs/pmd-cpd.xml"/>
+            <arg path="${project.basedir}/src"/>
         </exec>
 
         <echo message="Finished checking for duplicated code" level="info"/>
@@ -160,30 +197,31 @@
     <!-- Coding standard checks -->
     <target name="phpcs">
         <echo message="Copying standard definiton to actual PHPCS install..." level="info"/>
-        <mkdir dir="${basedir}/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/BuildrStandard"/>
+        <mkdir dir="${project.basedir}/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/BuildrStandard"/>
 
-        <copy todir="${basedir}/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/BuildrStandard">
-            <fileset dir="${basedir}/build/BuildrStandard"/>
+        <copy todir="${project.basedir}/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/BuildrStandard">
+            <fileset dir="${project.basedir}/build/BuildrStandard"/>
         </copy>
 
         <echo message="Started Coding standard checks" level="info"/>
 
-        <exec executable="${toolsdir}phpcs${binaryExtension}">
-            <arg value="--report=checkstyle"/>
-            <arg value="--report-file=${buildOutputPath}/logs/checkstyle.xml"/>
-            <arg value="--standard=BuildrStandard"/>
-            <arg value="-p"/>
-            <arg path="${basedir}/src"/>
+        <exec passthru="true" executable="${toolsdir}phpcs${binaryExtension}">
+            <arg value="--report=source" />
+            <arg value="--report=checkstyle" />
+            <arg value="--report-file=${buildOutputPath}/logs/checkstyle.xml" />
+            <arg value="--standard=BuildrStandard" />
+            <arg value="-p" />
+            <arg path="${project.basedir}/src" />
         </exec>
     </target>
 
     <!-- Software metrics -->
     <target name="pdepend">
-        <exec executable="${toolsdir}pdepend${binaryExtension}">
+        <exec passthru="true" executable="${toolsdir}pdepend${binaryExtension}">
             <arg value="--jdepend-xml=${buildOutputPath}/pdepend/jdepend.xml"/>
             <arg value="--jdepend-chart=${buildOutputPath}/pdepend/dependencies.svg"/>
             <arg value="--overview-pyramid=${buildOutputPath}/pdepend/overview-pyramid.svg"/>
-            <arg path="${basedir}/src"/>
+            <arg path="${project.basedir}/src"/>
         </exec>
     </target>
 
@@ -193,14 +231,14 @@
 
         <echo message="Started project size measurement" level="info"/>
 
-        <exec executable="${toolsdir}phploc${binaryExtension}">
+        <exec passthru="true" executable="${toolsdir}phploc${binaryExtension}">
             <arg value="--count-tests"/>
             <arg value="--log-csv"/>
             <arg path="${buildOutputPath}/logs/phploc.csv"/>
             <arg value="--log-xml"/>
             <arg path="${buildOutputPath}/logs/phploc.xml"/>
-            <arg path="${basedir}/src"/>
-            <arg path="${basedir}/tests"/>
+            <arg path="${project.basedir}/src"/>
+            <arg path="${project.basedir}/tests"/>
         </exec>
 
         <echo message="Finished project size measurement" level="info"/>
@@ -208,10 +246,10 @@
 
     <!-- Documentation generation -->
     <target name="documentation" description="Generate documentation for this build">
-        <exec executable="${toolsdir}apigen${binaryExtension}">
+        <exec passthru="true" executable="${toolsdir}apigen${binaryExtension}">
             <arg value="generate"/>
             <arg value="--source"/>
-            <arg path="${basedir}/src/"/>
+            <arg path="${project.basedir}/src/"/>
             <arg value="--destination"/>
             <arg path="${buildOutputPath}/doc"/>
             <arg value="--deprecated"/>
@@ -225,12 +263,12 @@
     <target name="artifact" description="Archive current build as artifact">
         <echo message="Started archiving current release" level="info"/>
 
-        <zip destfile="${buildOutputPath}/release/${ant.project.name}-${version}.${harbormaster_vcs_type}-${harbormaster_build_id}.zip"
+        <zip destfile="${buildOutputPath}/release/${phing.project.name}-${version}.${harbormaster_vcs_type}-${harbormaster_build_id}.zip"
              basedir="."
              excludes="**/vendor/**,**/build/**,**/cache.properties"
                 />
 
-        <zip destfile="${buildOutputPath}/release/${ant.project.name}-doc-${version}.${harbormaster_vcs_type}-${harbormaster_build_id}.zip"
+        <zip destfile="${buildOutputPath}/release/${phing.project.name}-doc-${version}.${harbormaster_vcs_type}-${harbormaster_build_id}.zip"
              basedir="${buildOutputPath}/doc"
                 />
 

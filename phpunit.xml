@@ -1,16 +1,20 @@
 <phpunit
-    bootstrap="./bootstrap.php"
-    backupGlobals="false"
-    backupStaticAttributes="false"
-    convertNoticesToExceptions="true"
-    convertErrorsToExceptions="true"
-    convertWarningsToExceptions="true"
-    verbose="true">
+        bootstrap="./bootstrap.php"
+        backupGlobals="false"
+        backupStaticAttributes="false"
+        convertNoticesToExceptions="true"
+        convertErrorsToExceptions="true"
+        convertWarningsToExceptions="true"
+        verbose="true">
     <testsuites>
         <testsuite name="BuildR - ClassLoader">
             <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
+
+    <logging>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
+    </logging>
 
     <!-- Generate code coverage report only from the src directory -->
     <filter>

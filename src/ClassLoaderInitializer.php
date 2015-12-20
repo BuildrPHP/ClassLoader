@@ -32,7 +32,7 @@ class ClassLoaderInitializer {
         'Exception' . DIRECTORY_SEPARATOR . 'ModuleException.php',
         'Exception' . DIRECTORY_SEPARATOR . 'ClassLoaderException.php',
         'ModuleLoader.php',
-        'ClassLoaderRegistry.php',
+        'ClassLoader.php',
     ];
 
     /**

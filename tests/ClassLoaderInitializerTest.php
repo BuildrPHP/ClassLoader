@@ -6,7 +6,7 @@ class ClassLoaderInitializerTest extends \PHPUnit_Framework_TestCase {
 
     public function testInitializerShouldBeExtendable() {
         ClassLoaderInitializer::extend([
-            str_replace('/', DIRECTORY_SEPARATOR, '../tests/Fixtures/AnotherDummyNamespace/AnotherDummyClass.php'),
+            str_replace('/', DIRECTORY_SEPARATOR, 'Modules/PEAR/PEARClassLoaderModule.php'),
         ]);
     }
 
@@ -18,8 +18,8 @@ class ClassLoaderInitializerTest extends \PHPUnit_Framework_TestCase {
 
         foreach($allLoadedFile as $loadedFile) {
             foreach($neededFiles as $neededFile) {
-                if(stripos($loadedFile, ltrim($neededFile, '.')) !== FALSE) {
-                    $foundFiles[] = $neededFile;
+                if(stripos($loadedFile, 'src' . DIRECTORY_SEPARATOR . ltrim($neededFile, '.')) !== FALSE) {
+                    $foundFiles[] = $loadedFile;
                 }
             }
         }

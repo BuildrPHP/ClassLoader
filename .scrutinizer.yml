@@ -6,10 +6,10 @@ build:
         coverage:
           file: 'coverage.clover'
           format: 'php-clover'
-checks:
-  php:
-    custom_coding_standard:
-      ruleset_path: 'build/BuildrStandard/ruleset.xml'
+tools:
+  php_code_sniffer:
+    config:
+      standard: "PSR1"
 filter:
   paths:
     - src/*

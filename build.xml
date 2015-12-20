@@ -27,7 +27,7 @@
 
     <!-- Detect run mode (Standalone or Phabricator)-->
     <if>
-        <isset property="${harbormaster_build_id}" />
+        <isset property="harbormaster_build_id" />
         <then>
             <property name="runMode" value="BUILD_SYSTEM" />
         </then>

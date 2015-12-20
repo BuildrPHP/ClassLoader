@@ -5,7 +5,7 @@ use BuildR\ClassLoader\Exception\ModuleException;
 use BuildR\ClassLoader\Modules\ClassLoaderModuleInterface;
 
 /**
- * The class loader registry. This class has multiple purpose, first its handle
+ * The class loader. This class has multiple purpose, first its handle
  * the module registration, secondly this is responsible for loading classes.
  *
  * BuildR PHP Framework
@@ -17,7 +17,7 @@ use BuildR\ClassLoader\Modules\ClassLoaderModuleInterface;
  * @license      https://github.com/Zolli/BuildR/blob/master/LICENSE.md
  * @link         https://github.com/Zolli/BuildR
  */
-class ClassLoaderRegistry {
+class ClassLoader {
 
     /**
      * How many times try to increase the priority of a given module, before
@@ -47,9 +47,9 @@ class ClassLoaderRegistry {
     private $moduleLoader;
 
     /**
-     * Creates a new instance from the loader registry.
+     * Creates a new instance from the class loader.
      *
-     * @return \BuildR\ClassLoader\ClassLoaderRegistry
+     * @return \BuildR\ClassLoader\ClassLoader
      */
     public static function create() {
         $moduleLoader = new ModuleLoader();
@@ -58,7 +58,7 @@ class ClassLoaderRegistry {
     }
 
     /**
-     * ClassLoaderRegistry constructor.
+     * ClassLoader constructor.
      *
      * @param \BuildR\ClassLoader\ModuleLoader $moduleLoader
      */
@@ -139,7 +139,7 @@ class ClassLoaderRegistry {
     }
 
     /**
-     * Returns the registry entire module stack.
+     * Returns the loader entire module stack.
      *
      * @return \BuildR\ClassLoader\Modules\ClassLoaderModuleInterface[]
      */
@@ -148,7 +148,7 @@ class ClassLoaderRegistry {
     }
 
     /**
-     * Register a new module in registry. and
+     * Register a new module in class loader. and
      * returns the module when the registration is success.
      *
      * @param \BuildR\ClassLoader\Modules\ClassLoaderModuleInterface $module

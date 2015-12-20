@@ -1,36 +1,36 @@
 <?php namespace BuildR\ClassLoader\Tests;
 
-use BuildR\ClassLoader\ClassLoaderRegistry;
+use BuildR\ClassLoader\ClassLoader;
 use BuildR\ClassLoader\Exception\ModuleException;
 use BuildR\ClassLoader\Tests\Fixtures\Modules\DummyModule;
 
-class RegistryTest extends \PHPUnit_Framework_TestCase {
+class ClassLoaderTest extends \PHPUnit_Framework_TestCase {
 
     /**
-     * @type \BuildR\ClassLoader\ClassLoaderRegistry
+     * @type \BuildR\ClassLoader\
      */
-    private $registry;
+    private $classLoader;
 
     public function setUp() {
-        $this->registry = ClassLoaderRegistry::create();
+        $this->classLoader = ClassLoader::create();
 
         parent::setUp();
     }
 
     public function tearDown() {
-        $this->registry->unRegisterLoader();
-        unset($this->registry);
+        $this->classLoader->unRegisterLoader();
+        unset($this->classLoader);
 
         parent::tearDown();
     }
 
     public function testItRegistersTheSPLLoaderCorrectly() {
         $functions = spl_autoload_functions();
-        $registryClass = ClassLoaderRegistry::class;
+        $loaderClass = ClassLoader::class;
         $found = FALSE;
 
         foreach($functions as $loaders) {
-            if(isset($loaders[0]) && ($loaders[0] instanceof $registryClass)) {
+            if(isset($loaders[0]) && ($loaders[0] instanceof $loaderClass)) {
                 $found = TRUE;
             }
         }
@@ -41,7 +41,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
     public function testModuleRegistration() {
         $this->loadDummyModule();
 
-        $moduleStack = $this->registry->getModuleStack();
+        $moduleStack = $this->classLoader->getModuleStack();
 
         //Module is loaded
         $this->assertArrayHasKey(100, $moduleStack);
@@ -75,7 +75,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
         $this->loadDummyModule();
         $this->loadDummyModule(110);
 
-        $moduleStack = $this->registry->getModuleStack();
+        $moduleStack = $this->classLoader->getModuleStack();
 
         $this->assertArrayHasKey(110, $moduleStack);
         $this->assertInstanceOf(DummyModule::class, $moduleStack[110]);
@@ -86,7 +86,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
         $exceptionCaught = FALSE;
 
         try {
-            $this->registry->removeModule(DummyModule::getName(), 110);
+            $this->classLoader->removeModule(DummyModule::getName(), 110);
         } catch(ModuleException $e) {
             $this->assertEquals('Name: DummyModule Priority: 110', $e->getModuleClass());
             $exceptionCaught = TRUE;
@@ -99,8 +99,8 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
 
     public function testItRemovesModuleCorrectly() {
         $this->loadDummyModule();
-        $this->registry->removeModule(DummyModule::getName(), 100);
-        $moduleStack = $this->registry->getModuleStack();
+        $this->classLoader->removeModule(DummyModule::getName(), 100);
+        $moduleStack = $this->classLoader->getModuleStack();
 
         $this->assertCount(0, $moduleStack);
     }
@@ -110,7 +110,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
         $exceptionCaught = FALSE;
 
         try {
-            $this->registry->getModule(DummyModule::getName(), 110);
+            $this->classLoader->getModule(DummyModule::getName(), 110);
         } catch(ModuleException $e) {
             $this->assertEquals('Name: DummyModule', $e->getModuleClass());
             $exceptionCaught = TRUE;
@@ -123,7 +123,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
 
     public function testItRetrievesSingleModuleCorrectly() {
         $this->loadDummyModule();
-        $module = $this->registry->getModule(DummyModule::getName(), 100);
+        $module = $this->classLoader->getModule(DummyModule::getName(), 100);
 
         $this->assertInstanceOf(DummyModule::class, $module);
     }
@@ -131,20 +131,20 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
     public function testItLoadFiles() {
         $this->loadDummyModule();
 
-        $result = $this->registry->loadClass('Foo\\Bar');
+        $result = $this->classLoader->loadClass('Foo\\Bar');
 
         $this->assertTrue($result);
         $this->assertTrue(defined('DUMMY_MODULE_LAST_LOADED_CLASS_FOO\BAR'));
     }
 
     public function testItLoadFilesWithNoModuleRegistered() {
-        $result = $this->registry->loadClass('Foo\\Bar');
+        $result = $this->classLoader->loadClass('Foo\\Bar');
 
         $this->assertFalse($result);
     }
 
     private function loadDummyModule($priority = NULL) {
-        $this->registry->loadModule(
+        $this->classLoader->loadModule(
             __DIR__ . DIRECTORY_SEPARATOR . 'Fixtures/Modules/DummyModule.php',
             DummyModule::class,
             $priority

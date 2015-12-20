@@ -1,6 +1,6 @@
 <?php namespace BuildR\ClassLoader\Tests\Modules;
 
-use BuildR\ClassLoader\ClassLoaderRegistry;
+use BuildR\ClassLoader\ClassLoader;
 use BuildR\ClassLoader\Modules\PEAR\PEARClassLoaderModule;
 use Test_Module_DummyClass as DummyClass;
 use BuildR\ClassLoader\Tests\Fixtures\AnotherDummyNamespace\AnotherDummyClass;
@@ -8,9 +8,9 @@ use BuildR\ClassLoader\Tests\Fixtures\AnotherDummyNamespace\AnotherDummyClass;
 class PEARModuleTest extends \PHPUnit_Framework_TestCase {
 
     /**
-     * @type \BuildR\ClassLoader\ClassLoaderRegistry
+     * @type \BuildR\ClassLoader\ClassLoader
      */
-    private $registry;
+    private $classLoader;
 
     /**
      * @type \BuildR\ClassLoader\Modules\PEAR\PEARClassLoaderModule
@@ -18,8 +18,8 @@ class PEARModuleTest extends \PHPUnit_Framework_TestCase {
     private $PEARModule;
 
     public function setUp() {
-        $this->registry = ClassLoaderRegistry::create();
-        $this->PEARModule = $this->registry->loadModule(
+        $this->classLoader = ClassLoader::create();
+        $this->PEARModule = $this->classLoader->loadModule(
             __DIR__ . DIRECTORY_SEPARATOR . '../../src/Modules/PEAR/PEARClassLoaderModule.php',
             PEARClassLoaderModule::class
         );
@@ -28,8 +28,8 @@ class PEARModuleTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function tearDown() {
-        $this->registry->unRegisterLoader();
-        unset($this->PEARModule, $this->registry);
+        $this->classLoader->unRegisterLoader();
+        unset($this->PEARModule, $this->classLoader);
 
         parent::tearDown();
     }
@@ -46,7 +46,6 @@ class PEARModuleTest extends \PHPUnit_Framework_TestCase {
 
         $this->assertFalse($this->PEARModule->prefixIsRegistered('Test_'));
     }
-
 
     /**
      * @expectedException \BuildR\ClassLoader\Modules\PEAR\PEARModuleException

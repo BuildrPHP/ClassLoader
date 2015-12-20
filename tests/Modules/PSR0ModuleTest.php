@@ -1,6 +1,6 @@
 <?php namespace BuildR\ClassLoader\Tests\Modules;
 
-use BuildR\ClassLoader\ClassLoaderRegistry;
+use BuildR\ClassLoader\ClassLoader;
 use BuildR\ClassLoader\Modules\PSR0\PSR0ClassLoaderModule;
 use PSR0Vendor\Package\DummyClass;
 use BuildR\ClassLoader\Tests\Fixtures\AnotherDummyNamespace\AnotherDummyClass;
@@ -8,9 +8,9 @@ use BuildR\ClassLoader\Tests\Fixtures\AnotherDummyNamespace\AnotherDummyClass;
 class PSR0ModuleTest extends \PHPUnit_Framework_TestCase {
 
     /**
-     * @type \BuildR\ClassLoader\ClassLoaderRegistry
+     * @type \BuildR\ClassLoader\ClassLoader
      */
-    private $registry;
+    private $classLoader;
 
     /**
      * @type \BuildR\ClassLoader\Modules\PSR0\PSR0ClassLoaderModule
@@ -18,8 +18,8 @@ class PSR0ModuleTest extends \PHPUnit_Framework_TestCase {
     private $PSR0Module;
 
     public function setUp() {
-        $this->registry = ClassLoaderRegistry::create();
-        $this->PSR0Module = $this->registry->loadModule(
+        $this->classLoader = ClassLoader::create();
+        $this->PSR0Module = $this->classLoader->loadModule(
             __DIR__ . DIRECTORY_SEPARATOR . '../../src/Modules/PSR0/PSR0ClassLoaderModule.php',
             PSR0ClassLoaderModule::class
         );
@@ -28,8 +28,8 @@ class PSR0ModuleTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function tearDown() {
-        $this->registry->unRegisterLoader();
-        unset($this->PSR0Module, $this->registry);
+        $this->classLoader->unRegisterLoader();
+        unset($this->PSR0Module, $this->classLoader);
 
         parent::tearDown();
     }

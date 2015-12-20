@@ -30,17 +30,17 @@ Registered modules are sorted by its priority, and this really speed up `spl_aut
 
 ### Priority system
 
-Modules have default priorities that determines the order when its called. Lower number, means higher priority. When you loading a module, and the module default priority is occupied in the registry, te registry will automatically try to lower (increase) the priority of the module, and its will be retried fot 5 times, to find an empty spot.
+Modules have default priorities that determines the order when its called. Lower number, means higher priority. When you loading a module, and the module default priority is occupied in the class loader, the loader will automatically try to lower (increase) the priority of the module, and its will be retried fot 5 times, to find an empty spot.
 
 ## Usage
 
-### Getting the registry
+### Getting the Class Loader
 
-The `Registry` is the main component of this package, this used to register modules, and getting registered modules to work with.
+The `ClassLoader` is the main component of this package, this used to register modules, and getting registered modules to work with.
 
-Use the `ClassLoaderRegistry::create()` method to create an instance from the class loader and register the created instance in `spl_autoload` queue, and returns the created instance.
+Use the `ClassLoader::create()` method to create an instance from the class loader and register the created instance in `spl_autoload` queue, and returns the created instance.
 ```php
-$classLoader = \BuildR\ClassLoader\ClassLoaderRegistry::create();
+$classLoader = \BuildR\ClassLoader\ClassLoader::create();
 ```
 
 ### Using Modules
@@ -50,7 +50,7 @@ Because this module not need any auto-load mechanism, you need 2 parameter to lo
 All modules have default priority, but you can optionally pass a third parameter that overrides the module default priority.
 
 ```php
-$psr4Module = $loaderRegistry->loadModule(
+$psr4Module = $classLoader->loadModule(
     __DIR__ . '/src/Modules/PSR4ClassLoaderModule.php', 
     \BuildR\ClassLoader\Modules\PSR4ClassLoaderModule::class,
     20
@@ -58,22 +58,25 @@ $psr4Module = $loaderRegistry->loadModule(
 ```
 When the registration is complete the modules `ClassLoaderModuleInterface::onRegistered()` method will be called and a new instance from the module is returned. 
 
-This instance is used to configureing the module, e.g. registering namespaces, class maps etc...
+This instance is used to configuring the module, e.g. registering namespaces, class maps etc...
 
 ### Retrieving modules
 
-Modules will be retrieved any time by calling the registry `getModuleByName($moduleName)` method. Each module have a unique, specific name. The modules have a static method (`ClassLoaderModuleInterface::getName()`) to retrieve the module name.
+Modules will be retrieved any time by calling the class loader `getModuleByName($moduleName, $registeredPriority)` method. Each module have a unique, specific name. The modules have a static method (`ClassLoaderModuleInterface::getName()`) to retrieve the module name.
 
 ### Un-registering modules
 
-Modules can be removed from the loader stack by calling the registry (`ClassLoaderRegistry::removeModuleByName($moduleName)`) method.
+Modules can be removed from the loader stack by calling the loader (`ClassLoader::removeModuleByName($moduleName, $registeredPriority)`) method.
 
 When removing a module the stack will be re-sorted.
 
 ## ToDo
 
- - [ ] Add common modules
- - [ ] Refactor Modules to own sub-namespace
+ - [X] Add common modules
+ - [ ] Variable class loader module
+ - [ ] Class map loader
+ - [ ] Caches for class loaders
+ - [X] Refactor Modules to own sub-namespace
  - [ ] Improve documentation
 
 ## Contribution

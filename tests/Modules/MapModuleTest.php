@@ -44,14 +44,14 @@ class MapModuleTest extends \PHPUnit_Framework_TestCase {
         ];
     }
 
-    public function testItRegisterNamespaces() {
+    public function testItRegisterMaps() {
         list($mapName, $map) = $this->createDummyMap();
         $this->MapModule->registerMap($mapName, $map);
 
         $this->assertTrue($this->MapModule->mapIsRegistered($mapName));
     }
 
-    public function testNamespaceUnRegistration() {
+    public function testMapUnRegistration() {
         list($mapName, $map) = $this->createDummyMap();
 
         //Remove existing map
@@ -71,7 +71,7 @@ class MapModuleTest extends \PHPUnit_Framework_TestCase {
      * @expectedException \BuildR\ClassLoader\Modules\Map\MapModuleException
      * @expectedExceptionMessage The following map name is already occupied: testMap
      */
-    public function testItThrowsExceptionWhenTryToRegisterSameNamespaceTwice() {
+    public function testItThrowsExceptionWhenTryToRegisterSameMapNameTwice() {
         list($mapName, $map) = $this->createDummyMap();
         $this->MapModule->registerMap($mapName, $map);
         $this->MapModule->registerMap($mapName, $map);
@@ -92,7 +92,7 @@ class MapModuleTest extends \PHPUnit_Framework_TestCase {
         $this->assertFalse($this->MapModule->load(AnotherDummyClass::class));
     }
 
-    public function testIsReturningFalseWhenNoNamespaceRegistered() {
+    public function testIsReturningFalseWhenNoMapRegistered() {
         $r = $this->MapModule->load('NonExistingVendor\\Namespace\\ClassName');
 
         $this->assertFalse($r);

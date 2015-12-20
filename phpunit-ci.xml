@@ -13,10 +13,10 @@
     </testsuites>
 
     <logging>
-        <log type="coverage-html" target="./output/coverage"/>
-        <log type="coverage-clover" target="./output/logs/clover.xml"/>
-        <log type="coverage-crap4j" target="./output/logs/crap4j.xml"/>
-        <log type="junit" target="./output/logs/junit.xml" logIncompleteSkipped="false"/>
+        <log type="coverage-html" target="./build/output/coverage"/>
+        <log type="coverage-clover" target="./build/output/logs/clover.xml"/>
+        <log type="coverage-crap4j" target="./build/output/logs/crap4j.xml"/>
+        <log type="junit" target="./build/output/logs/junit.xml" logIncompleteSkipped="false"/>
     </logging>
 
     <!-- Generate code coverage report only from the src directory -->

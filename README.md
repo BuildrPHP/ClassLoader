@@ -73,7 +73,7 @@ When removing a module the stack will be re-sorted.
 ## ToDo
 
  - [X] Add common modules
- - [ ] Variable class loader module
+ - [X] Variable class loader module
  - [X] Class map loader
  - [ ] Caches for class loaders
  - [X] Refactor Modules to own sub-namespace

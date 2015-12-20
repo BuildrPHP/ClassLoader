@@ -130,13 +130,27 @@
 
         <echo message="Running the following sub-command: ${composer.subCommand}" level="info"/>
 
-        <exec executable="${composer.baseCommand}">
-            <arg file="${composer.baseCommandExt}" />
-            <arg value="${composer.subCommand}" />
-            <arg value="--no-interaction" />
-            <arg value="--optimize-autoloader" />
-            <arg value="--dev" />
-        </exec>
+        <if>
+            <equals arg1="${composer.availableGlobally}" arg2="1" />
+            <then>
+                <exec executable="${composer.baseCommand}">
+                    <arg value="${composer.subCommand}" />
+                    <arg value="--no-interaction" />
+                    <arg value="--optimize-autoloader" />
+                    <arg value="--dev" />
+                </exec>
+            </then>
+
+            <else>
+                <exec executable="${composer.baseCommand}">
+                    <arg file="${composer.baseCommandExt}" />
+                    <arg value="${composer.subCommand}" />
+                    <arg value="--no-interaction" />
+                    <arg value="--optimize-autoloader" />
+                    <arg value="--dev" />
+                </exec>
+            </else>
+        </if>
 
     </target>
 

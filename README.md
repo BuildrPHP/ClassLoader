@@ -1,6 +1,8 @@
 [![Build Status](http://ci.zolli.hu/view/Components/job/Class%20Loader/badge/icon)](http://ci.zolli.hu/view/Components/job/Class%20Loader/)
-[![Dependency Status](https://www.versioneye.com/user/projects/56772d5d107997003000130f/badge.svg?style=flat)](https://www.versioneye.com/user/projects/56772d5d107997003000130f)
+[![Code Coverage](https://scrutinizer-ci.com/g/BuildrPHP/ClassLoader/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/BuildrPHP/ClassLoader/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/BuildrPHP/ClassLoader/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/BuildrPHP/ClassLoader/?branch=master)
+[![Dependency Status](https://www.versioneye.com/user/projects/56772d5d107997003000130f/badge.svg?style=flat)](https://www.versioneye.com/user/projects/56772d5d107997003000130f)
+[![PHP7 Status](https://img.shields.io/badge/PHP7-tested-8892BF.svg)](https://github.com/BuildrPHP/ClassLoader)
 
 # BuildR - Class Loader
 ### Highly experimental PHP framework

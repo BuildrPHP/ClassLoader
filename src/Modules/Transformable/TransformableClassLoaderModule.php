@@ -28,7 +28,9 @@ class TransformableClassLoaderModule extends AbstractClassLoaderModule {
      * @codeCoverageIgnore
      */
     public static function getAdditionalModuleFiles() {
-        return [];
+        return [
+            __DIR__ . DIRECTORY_SEPARATOR . 'TransformableModuleException.php',
+        ];
     }
 
     /**

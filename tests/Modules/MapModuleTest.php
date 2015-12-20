@@ -24,6 +24,8 @@ class MapModuleTest extends \PHPUnit_Framework_TestCase {
             MapClassLoaderModule::class
         );
 
+        $this->classLoader->registerLoader();
+
         parent::setUp();
     }
 

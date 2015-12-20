@@ -24,6 +24,8 @@ class PEARModuleTest extends \PHPUnit_Framework_TestCase {
             PEARClassLoaderModule::class
         );
 
+        $this->classLoader->registerLoader();
+
         parent::setUp();
     }
 

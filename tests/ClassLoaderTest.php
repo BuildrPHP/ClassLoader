@@ -13,6 +13,7 @@ class ClassLoaderTest extends \PHPUnit_Framework_TestCase {
 
     public function setUp() {
         $this->classLoader = ClassLoader::create();
+        $this->classLoader->registerLoader();
 
         parent::setUp();
     }

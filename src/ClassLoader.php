@@ -64,7 +64,6 @@ class ClassLoader {
      */
     protected function __construct(ModuleLoader $moduleLoader) {
         $this->moduleLoader = $moduleLoader;
-        $this->registerLoader();
     }
 
     /**

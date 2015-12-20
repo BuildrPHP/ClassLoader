@@ -24,6 +24,8 @@ class TransformableModuleTest extends \PHPUnit_Framework_TestCase {
             TransformableClassLoaderModule::class
         );
 
+        $this->classLoader->registerLoader();
+
         parent::setUp();
     }
 

@@ -24,6 +24,8 @@ class PSR4ModuleTest extends \PHPUnit_Framework_TestCase {
             PSR4ClassLoaderModule::class
         );
 
+        $this->classLoader->registerLoader();
+
         parent::setUp();
     }
 

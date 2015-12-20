@@ -5,8 +5,9 @@
 *.orig
 
 # Composer vendor folder and lock files
-vendor/
+/vendor/
 composer.lock
 
 # Build Process output files
 build/output/*
+

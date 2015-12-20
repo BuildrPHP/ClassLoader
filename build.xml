@@ -57,7 +57,7 @@
 
     <!-- Target for default build configuration -->
     <target name="build"
-            depends="clean,prepare ,lint,phpunit,phpcs,phpcpd,phploc,pdepend,documentation,changelog,artifact"
+            depends="clean,prepare,composer,lint,phpunit,phpcs,phpcpd,phploc,pdepend,documentation,changelog,artifact"
             description="Main build target for internal build-system builds"/>
 
     <!-- Clean all previous build in workspace -->

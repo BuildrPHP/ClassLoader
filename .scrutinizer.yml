@@ -1,0 +1,16 @@
+build:
+  tests:
+    override:
+      -
+        command: 'phpunit --configuration=phpunit.xml --coverage-clover=coverage.clover'
+        coverage:
+          file: 'coverage.clover'
+          format: 'php-clover'
+checks:
+  php:
+    custom_coding_standard:
+      ruleset_path: 'build/BuildrStandard/ruleset.xml'
+filter:
+  excluded_paths:
+    - tests/*
+    - build/*

@@ -39,6 +39,7 @@ class MapModuleTest extends \PHPUnit_Framework_TestCase {
             'testMap',
             [
                 DummyClass::class => realpath(__DIR__ . '/../Fixtures/Map') . DIRECTORY_SEPARATOR . 'DummyClass.php',
+                AnotherDummyClass::class => realpath(__DIR__ . '/../Fixtures/Map') . '/AnotherDummyClass.php',
             ],
         ];
     }
@@ -81,6 +82,13 @@ class MapModuleTest extends \PHPUnit_Framework_TestCase {
         $this->MapModule->registerMap($mapName, $map);
 
         $this->assertTrue($this->MapModule->load(DummyClass::class));
+        $this->assertFalse($this->MapModule->load(AnotherDummyClass::class));
+    }
+
+    public function testIsReturnFalseWhenClassFileNotExist() {
+        list($mapName, $map) = $this->createDummyMap();
+        $this->MapModule->registerMap($mapName, $map);
+
         $this->assertFalse($this->MapModule->load(AnotherDummyClass::class));
     }
 

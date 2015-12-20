@@ -1,6 +1,7 @@
 <?php namespace BuildR\ClassLoader\Modules\PEAR;
 
 use BuildR\ClassLoader\Modules\AbstractClassLoaderModule;
+use BuildR\ClassLoader\Modules\PEAR\PEARModuleException;
 
 /**
  * PEAR compatible class loader module.

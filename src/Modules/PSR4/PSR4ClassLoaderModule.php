@@ -1,6 +1,7 @@
 <?php namespace BuildR\ClassLoader\Modules\PSR4;
 
 use BuildR\ClassLoader\Modules\AbstractClassLoaderModule;
+use BuildR\ClassLoader\Modules\PSR4\PSR4ModuleException;
 
 /**
  * PSR-4 compatible class loader module

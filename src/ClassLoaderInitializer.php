@@ -19,7 +19,7 @@ class ClassLoaderInitializer {
     /**
      * @type bool
      */
-    public static $isLoaded = FALSE;
+    protected static $isLoaded = FALSE;
 
     /**
      * The files that loaded during the initialization phase
@@ -27,13 +27,35 @@ class ClassLoaderInitializer {
      * @type array
      */
     public static $files = [
-        0 => 'Modules' . DIRECTORY_SEPARATOR . 'ClassLoaderModuleInterface.php',
-        1 => 'Modules' . DIRECTORY_SEPARATOR . 'AbstractClassLoaderModule.php',
-        2 => 'Exception' . DIRECTORY_SEPARATOR . 'ModuleException.php',
-        3 => 'Exception' . DIRECTORY_SEPARATOR . 'ClassLoaderException.php',
-        4 => 'ModuleLoader.php',
-        5 => 'ClassLoaderRegistry.php',
+        'Modules' . DIRECTORY_SEPARATOR . 'ClassLoaderModuleInterface.php',
+        'Modules' . DIRECTORY_SEPARATOR . 'AbstractClassLoaderModule.php',
+        'Exception' . DIRECTORY_SEPARATOR . 'ModuleException.php',
+        'Exception' . DIRECTORY_SEPARATOR . 'ClassLoaderException.php',
+        'ModuleLoader.php',
+        'ClassLoaderRegistry.php',
     ];
+
+    /**
+     * Extends the initializer internal file registry before initialize
+     *
+     * @param $additionalFile
+     */
+    public static function extend($additionalFile) {
+        if(self::$isLoaded === TRUE) {
+            trigger_error('The initializer is loaded, so you cannot extend a loaded initializer!', E_USER_NOTICE);
+        }
+
+        self::$files = array_merge(self::$files, (array) $additionalFile);
+    }
+
+    /**
+     * Returns all files loaded by the initializer
+     *
+     * @return array
+     */
+    public static function getLoadedFiles() {
+        return self::$files;
+    }
 
     /**
      * Load all files that needs to use the class loader

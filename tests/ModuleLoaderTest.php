@@ -29,8 +29,8 @@ class ModuleLoaderTest extends \PHPUnit_Framework_TestCase {
         include_once __DIR__ . DIRECTORY_SEPARATOR . 'Fixtures/Modules/DummyModule.php';
         $this->moduleLoader->preLoad(DummyModule::class);
 
-        $this->assertTrue(function_exists('preLoadTest'));
-        $this->assertEquals('Hello Class PreLoader', preLoadTest());
+        $this->assertTrue(defined('DUMMY_MODULE_LOADED'));
+        $this->assertEquals('TRUE', DUMMY_MODULE_LOADED);
     }
 
 }

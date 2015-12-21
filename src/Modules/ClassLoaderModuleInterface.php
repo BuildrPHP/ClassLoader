@@ -18,14 +18,6 @@
 interface ClassLoaderModuleInterface {
 
     /**
-     * Returns an array that may contains additional files thats needs
-     * to be loaded for the module initialization.
-     *
-     * @return array
-     */
-    public static function getAdditionalModuleFiles();
-
-    /**
      * Returns a unique name for the laoder module
      *
      * @return string

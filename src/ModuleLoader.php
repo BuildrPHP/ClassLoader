@@ -37,12 +37,6 @@ class ModuleLoader {
             throw ModuleException::invalid($moduleClassName);
         }
 
-        $preloadedFiles = (array) call_user_func([$moduleClassName, 'getAdditionalModuleFiles']);
-
-        foreach($preloadedFiles as $file) {
-            include_once $file;
-        }
-
         $module = new $moduleClassName;
 
         return $module;

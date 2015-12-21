@@ -19,19 +19,14 @@ use BuildR\ClassLoader\Modules\Map\MapModuleException;
 class MapClassLoaderModule extends AbstractClassLoaderModule {
 
     /**
+     * @type int
+     */
+    protected $priority = 10;
+
+    /**
      * @type array
      */
     private $registeredMaps = [];
-
-    /**
-     * @inheritDoc
-     * @codeCoverageIgnore
-     */
-    public static function getAdditionalModuleFiles() {
-        return [
-            __DIR__ . DIRECTORY_SEPARATOR . 'MapModuleException.php',
-        ];
-    }
 
     /**
      * @inheritDoc
@@ -46,7 +41,7 @@ class MapClassLoaderModule extends AbstractClassLoaderModule {
      * @codeCoverageIgnore
      */
     public function getPriority() {
-        return 5;
+        return $this->priority;
     }
 
     /**

@@ -19,19 +19,14 @@ use BuildR\ClassLoader\Modules\PSR4\PSR4ModuleException;
 class PSR4ClassLoaderModule extends AbstractClassLoaderModule {
 
     /**
+     * @type int
+     */
+    protected $priority = 20;
+
+    /**
      * @type array
      */
     protected $registeredNamespaces = [];
-
-    /**
-     * @inheritDoc
-     * @codeCoverageIgnore
-     */
-    public static function getAdditionalModuleFiles() {
-        return [
-            __DIR__ . DIRECTORY_SEPARATOR . 'PSR4ModuleException.php',
-        ];
-    }
 
     /**
      * @inheritDoc
@@ -46,7 +41,7 @@ class PSR4ClassLoaderModule extends AbstractClassLoaderModule {
      * @codeCoverageIgnore
      */
     public function getPriority() {
-        return 10;
+        return $this->priority;
     }
 
     /**
@@ -102,7 +97,7 @@ class PSR4ClassLoaderModule extends AbstractClassLoaderModule {
 
         $this->registeredNamespaces[] = [
             $namespace,
-            realpath($basePath)
+            realpath($basePath) . DIRECTORY_SEPARATOR
         ];
     }
 

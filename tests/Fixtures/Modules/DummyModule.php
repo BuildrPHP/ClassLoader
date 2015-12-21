@@ -9,15 +9,6 @@ class DummyModule extends AbstractClassLoaderModule {
     /**
      * @inheritDoc
      */
-    public static function getAdditionalModuleFiles() {
-        return [
-            __DIR__ . DIRECTORY_SEPARATOR . 'preLoadTestFile.php',
-        ];
-    }
-
-    /**
-     * @inheritDoc
-     */
     public static function getName() {
         return 'DummyModule';
     }

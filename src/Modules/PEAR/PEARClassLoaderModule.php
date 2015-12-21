@@ -19,19 +19,14 @@ use BuildR\ClassLoader\Modules\PEAR\PEARModuleException;
 class PEARClassLoaderModule extends AbstractClassLoaderModule {
 
     /**
+     * @type int
+     */
+    protected $priority = 50;
+
+    /**
      * @type array
      */
     private $registeredPrefixes = [];
-
-    /**
-     * @inheritDoc
-     * @codeCoverageIgnore
-     */
-    public static function getAdditionalModuleFiles() {
-        return [
-            __DIR__ . DIRECTORY_SEPARATOR . 'PEARModuleException.php',
-        ];
-    }
 
     /**
      * @inheritDoc
@@ -46,7 +41,7 @@ class PEARClassLoaderModule extends AbstractClassLoaderModule {
      * @codeCoverageIgnore
      */
     public function getPriority() {
-        return 50;
+        return $this->priority;
     }
 
     /**

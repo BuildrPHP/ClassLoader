@@ -19,6 +19,11 @@ use BuildR\ClassLoader\Modules\PSR0\PSR0ModuleException;
 class PSR0ClassLoaderModule extends AbstractClassLoaderModule {
 
     /**
+     * @type int
+     */
+    protected $priority = 40;
+
+    /**
      * @type array
      */
     protected $registeredNamespaces = [];
@@ -36,17 +41,6 @@ class PSR0ClassLoaderModule extends AbstractClassLoaderModule {
      * @codeCoverageIgnore
      */
     public function onRegistered() {}
-
-    /**
-     * @inheritDoc
-     * @codeCoverageIgnore
-     */
-    public static function getAdditionalModuleFiles() {
-        return [
-            __DIR__ . DIRECTORY_SEPARATOR . '../PSR4/PSR4ModuleException.php',
-            __DIR__ . DIRECTORY_SEPARATOR . 'PSR0ModuleException.php',
-        ];
-    }
 
     /**
      * @inheritDoc

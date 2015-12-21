@@ -24,6 +24,14 @@ class PEARModuleTest extends \PHPUnit_Framework_TestCase {
             PEARClassLoaderModule::class
         );
 
+        /** @type \BuildR\ClassLoader\Modules\PSR4\PSR4ClassLoaderModule $module */
+        $module = $this->classLoader->loadModule(
+            __DIR__ . DIRECTORY_SEPARATOR . '../../src/Modules/PSR4/PSR4ClassLoaderModule.php',
+            \BuildR\ClassLoader\Modules\PSR4\PSR4ClassLoaderModule::class
+        );
+
+        $module->registerNamespace('BuildR\\ClassLoader\\', __DIR__ . DIRECTORY_SEPARATOR . '../../src');
+
         $this->classLoader->registerLoader();
 
         parent::setUp();

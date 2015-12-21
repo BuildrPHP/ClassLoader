@@ -24,6 +24,7 @@ class PSR4ModuleTest extends \PHPUnit_Framework_TestCase {
             PSR4ClassLoaderModule::class
         );
 
+        $this->PSR4Module->registerNamespace('BuildR\\ClassLoader\\', __DIR__ . DIRECTORY_SEPARATOR . '../../src');
         $this->classLoader->registerLoader();
 
         parent::setUp();
@@ -69,7 +70,9 @@ class PSR4ModuleTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testIsReturningFalseWhenNoNamespaceRegistered() {
+        $this->PSR4Module->unRegisterNamespace('BuildR\\ClassLoader\\');
         $r = $this->PSR4Module->load('NonExistingVendor\\Namespace\\ClassName');
+        $this->PSR4Module->registerNamespace('BuildR\\ClassLoader\\', __DIR__ . DIRECTORY_SEPARATOR . '../../src');
 
         $this->assertFalse($r);
     }

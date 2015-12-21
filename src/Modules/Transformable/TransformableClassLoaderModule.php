@@ -19,19 +19,14 @@ use BuildR\ClassLoader\Modules\Transformable\TransformableModuleException;
 class TransformableClassLoaderModule extends AbstractClassLoaderModule {
 
     /**
+     * @type int
+     */
+    protected $priority = 30;
+
+    /**
      * @type array
      */
     private $registeredTransformers = [];
-
-    /**
-     * @inheritDoc
-     * @codeCoverageIgnore
-     */
-    public static function getAdditionalModuleFiles() {
-        return [
-            __DIR__ . DIRECTORY_SEPARATOR . 'TransformableModuleException.php',
-        ];
-    }
 
     /**
      * @inheritDoc
@@ -46,7 +41,7 @@ class TransformableClassLoaderModule extends AbstractClassLoaderModule {
      * @codeCoverageIgnore
      */
     public function getPriority() {
-        return 25;
+        return $this->priority;
     }
 
     /**

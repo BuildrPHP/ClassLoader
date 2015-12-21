@@ -18,7 +18,7 @@ abstract class AbstractClassLoaderModule implements ClassLoaderModuleInterface {
     /**
      * @type int
      */
-    public $priority = 10;
+    protected $priority = 10;
 
     /**
      * @inheritDoc

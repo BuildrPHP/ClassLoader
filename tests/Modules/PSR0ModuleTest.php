@@ -2,8 +2,10 @@
 
 use BuildR\ClassLoader\ClassLoader;
 use BuildR\ClassLoader\Modules\PSR0\PSR0ClassLoaderModule;
-use PSR0Vendor\Package\DummyClass;
+use BuildR\ClassLoader\Modules\PSR4\PSR4ClassLoaderModule;
 use BuildR\ClassLoader\Tests\Fixtures\AnotherDummyNamespace\AnotherDummyClass;
+use Nette\Utils\SafeStream;
+use PSR0Vendor\Package\DummyClass;
 
 class PSR0ModuleTest extends \PHPUnit_Framework_TestCase {
 
@@ -24,12 +26,21 @@ class PSR0ModuleTest extends \PHPUnit_Framework_TestCase {
             PSR0ClassLoaderModule::class
         );
 
+        /** @type \BuildR\ClassLoader\Modules\PSR4\PSR4ClassLoaderModule $module */
+        $module = $this->classLoader->loadModule(
+            __DIR__ . DIRECTORY_SEPARATOR . '../../src/Modules/PSR4/PSR4ClassLoaderModule.php',
+            PSR4ClassLoaderModule::class, 200
+        );
+
+        $module->registerNamespace('BuildR\\ClassLoader\\', __DIR__ . DIRECTORY_SEPARATOR . '../../src');
+
         $this->classLoader->registerLoader();
 
         parent::setUp();
     }
 
     public function tearDown() {
+        $this->classLoader->removeModule(PSR4ClassLoaderModule::getName(), 200);
         $this->classLoader->unRegisterLoader();
         unset($this->PSR0Module, $this->classLoader);
 

@@ -26,12 +26,12 @@ class ClassLoaderTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testItRegistersTheSPLLoaderCorrectly() {
-        $functions = spl_autoload_functions();
+        $loaders = spl_autoload_functions();
         $loaderClass = ClassLoader::class;
         $found = FALSE;
 
-        foreach($functions as $loaders) {
-            if(isset($loaders[0]) && ($loaders[0] instanceof $loaderClass)) {
+        foreach($loaders as $loader) {
+            if(is_array($loader) && isset($loader[0]) && ($loader[0] instanceof $loaderClass)) {
                 $found = TRUE;
             }
         }

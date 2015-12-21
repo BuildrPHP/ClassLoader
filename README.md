@@ -26,6 +26,17 @@ include_once './src/ClassLoaderInitializer.php';
 
 //Load all classes
 \BuildR\ClassLoader\ClassLoaderInitializer::load();
+
+//Register the class loader namespace
+$loader = ClassLoader::create();
+
+/** @type \BuildR\ClassLoader\Modules\PSR4\PSR4ClassLoaderModule $module */
+$PSR4Module = $loader->loadModule(
+    __DIR__ . DIRECTORY_SEPARATOR . '../../src/Modules/PSR4/PSR4ClassLoaderModule.php',
+    \BuildR\ClassLoader\Modules\PSR4\PSR4ClassLoaderModule::class
+);
+
+$PSR4Module->registerNamespace('BuildR\\ClassLoader\\', __DIR__ . '/src');
 ```
 
 ## Main concept

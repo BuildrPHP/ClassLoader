@@ -1,16 +1,15 @@
 <?php namespace BuildR\ClassLoader\Tests\Modules;
 
-use BuildR\ClassLoader\ClassLoader;
 use BuildR\ClassLoader\Modules\Transformable\TransformableClassLoaderModule;
 use BuildR\ClassLoader\Tests\Fixtures\AnotherDummyNamespace\AnotherDummyClass;
 use Vendor_Package_DummyClass as DummyClass;
 
-class TransformableModuleTest extends \PHPUnit_Framework_TestCase {
+class TransformableModuleTest extends AbstractModuleTestCase {
 
     /**
      * @type \BuildR\ClassLoader\ClassLoader
      */
-    private $classLoader;
+    protected $classLoader;
 
     /**
      * @type \BuildR\ClassLoader\Modules\Transformable\TransformableClassLoaderModule
@@ -18,23 +17,12 @@ class TransformableModuleTest extends \PHPUnit_Framework_TestCase {
     private $TransformableModule;
 
     public function setUp() {
-        $this->classLoader = ClassLoader::create();
+       parent::setUp();
+
         $this->TransformableModule = $this->classLoader->loadModule(
             __DIR__ . DIRECTORY_SEPARATOR . '../../src/Modules/Transformable/TransformableClassLoaderModule.php',
             TransformableClassLoaderModule::class
         );
-
-        /** @type \BuildR\ClassLoader\Modules\PSR4\PSR4ClassLoaderModule $module */
-        $module = $this->classLoader->loadModule(
-            __DIR__ . DIRECTORY_SEPARATOR . '../../src/Modules/PSR4/PSR4ClassLoaderModule.php',
-            \BuildR\ClassLoader\Modules\PSR4\PSR4ClassLoaderModule::class
-        );
-
-        $module->registerNamespace('BuildR\\ClassLoader\\', __DIR__ . DIRECTORY_SEPARATOR . '../../src');
-
-        $this->classLoader->registerLoader();
-
-        parent::setUp();
     }
 
     public function tearDown() {

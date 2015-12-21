@@ -1,16 +1,15 @@
 <?php namespace BuildR\ClassLoader\Tests\Modules;
 
-use BuildR\ClassLoader\ClassLoader;
 use BuildR\ClassLoader\Modules\PEAR\PEARClassLoaderModule;
-use Test_Module_DummyClass as DummyClass;
 use BuildR\ClassLoader\Tests\Fixtures\AnotherDummyNamespace\AnotherDummyClass;
+use Test_Module_DummyClass as DummyClass;
 
-class PEARModuleTest extends \PHPUnit_Framework_TestCase {
+class PEARModuleTest extends AbstractModuleTestCase {
 
     /**
      * @type \BuildR\ClassLoader\ClassLoader
      */
-    private $classLoader;
+    protected $classLoader;
 
     /**
      * @type \BuildR\ClassLoader\Modules\PEAR\PEARClassLoaderModule
@@ -18,23 +17,12 @@ class PEARModuleTest extends \PHPUnit_Framework_TestCase {
     private $PEARModule;
 
     public function setUp() {
-        $this->classLoader = ClassLoader::create();
+        parent::setUp();
+
         $this->PEARModule = $this->classLoader->loadModule(
             __DIR__ . DIRECTORY_SEPARATOR . '../../src/Modules/PEAR/PEARClassLoaderModule.php',
             PEARClassLoaderModule::class
         );
-
-        /** @type \BuildR\ClassLoader\Modules\PSR4\PSR4ClassLoaderModule $module */
-        $module = $this->classLoader->loadModule(
-            __DIR__ . DIRECTORY_SEPARATOR . '../../src/Modules/PSR4/PSR4ClassLoaderModule.php',
-            \BuildR\ClassLoader\Modules\PSR4\PSR4ClassLoaderModule::class
-        );
-
-        $module->registerNamespace('BuildR\\ClassLoader\\', __DIR__ . DIRECTORY_SEPARATOR . '../../src');
-
-        $this->classLoader->registerLoader();
-
-        parent::setUp();
     }
 
     public function tearDown() {

@@ -1,32 +1,16 @@
 <?php namespace BuildR\ClassLoader\Tests\Modules;
 
-use BuildR\ClassLoader\ClassLoader;
-use BuildR\ClassLoader\Modules\PSR4\PSR4ClassLoaderModule;
 use BuildR\ClassLoader\Tests\Fixtures\DummyNamespace\DummyClass;
 use BuildR\ClassLoader\Tests\Fixtures\AnotherDummyNamespace\AnotherDummyClass;
 
-class PSR4ModuleTest extends \PHPUnit_Framework_TestCase {
+class PSR4ModuleTest extends AbstractModuleTestCase {
 
     /**
      * @type \BuildR\ClassLoader\ClassLoader
      */
-    private $classLoader;
-
-    /**
-     * @type \BuildR\ClassLoader\Modules\PSR4\PSR4ClassLoaderModule
-     */
-    private $PSR4Module;
+    protected $classLoader;
 
     public function setUp() {
-        $this->classLoader = ClassLoader::create();
-        $this->PSR4Module = $this->classLoader->loadModule(
-            __DIR__ . DIRECTORY_SEPARATOR . '../../src/Modules/PSR4/PSR4ClassLoaderModule.php',
-            PSR4ClassLoaderModule::class
-        );
-
-        $this->PSR4Module->registerNamespace('BuildR\\ClassLoader\\', __DIR__ . DIRECTORY_SEPARATOR . '../../src');
-        $this->classLoader->registerLoader();
-
         parent::setUp();
     }
 

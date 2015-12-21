@@ -1,3 +1,5 @@
 <?php
 
-include_once __DIR__ . DIRECTORY_SEPARATOR . '/src/ClassLoaderInitializer.php';
+include_once __DIR__ . DIRECTORY_SEPARATOR . 'src/ClassLoaderInitializer.php';
+
+$initializer = (new \BuildR\ClassLoader\ClassLoaderInitializer())->load();

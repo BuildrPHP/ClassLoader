@@ -2,7 +2,7 @@
     bootstrap="./bootstrap.php"
     backupGlobals="false"
     backupStaticAttributes="false"
-    convertNoticesToExceptions="true"
+    convertNoticesToExceptions="false"
     convertErrorsToExceptions="true"
     convertWarningsToExceptions="true"
     verbose="true">

@@ -4,15 +4,32 @@ use BuildR\ClassLoader\ClassLoaderInitializer;
 
 class ClassLoaderInitializerTest extends \PHPUnit_Framework_TestCase {
 
+    /**
+     * @type \BuildR\ClassLoader\ClassLoaderInitializer
+     */
+    private $initializer;
+
+    public function setUp() {
+        $this->initializer = new ClassLoaderInitializer();
+
+        parent::setUp();
+    }
+
+    public function tearDown() {
+        unset($this->initializer);
+
+        parent::tearDown();
+    }
+
     public function testInitializerShouldBeExtendable() {
-        ClassLoaderInitializer::extend([
+        $this->initializer->extend([
             str_replace('/', DIRECTORY_SEPARATOR, 'Modules/PEAR/PEARClassLoaderModule.php'),
         ]);
     }
 
     public function testFilesLoadedCorrectly() {
-        ClassLoaderInitializer::load();
-        $neededFiles = ClassLoaderInitializer::$files;
+        $this->initializer->load();
+        $neededFiles = ClassLoaderInitializer::getLoadedFiles();
         $allLoadedFile = get_included_files();
         $foundFiles = [];
 
@@ -35,8 +52,8 @@ class ClassLoaderInitializerTest extends \PHPUnit_Framework_TestCase {
             $self->assertEquals('Unable to load ClassLoader because its already loaded!', $errStr);
         });
 
-        //Actual test
-        ClassLoaderInitializer::load();
+        $this->initializer->load();
+        $this->initializer->load();
 
         restore_error_handler();
     }
@@ -49,10 +66,18 @@ class ClassLoaderInitializerTest extends \PHPUnit_Framework_TestCase {
             $self->assertEquals('The initializer is loaded, so you cannot extend a loaded initializer!', $errStr);
         });
 
-        //Actual test
-        ClassLoaderInitializer::extend([]);
+        $this->initializer->load();
+        $this->initializer->extend([]);
 
         restore_error_handler();
+    }
+
+    public function testIsSetsLoadedFlagCorrectly() {
+        $this->assertFalse($this->initializer->isLoaded());
+
+        $this->initializer->load();
+
+        $this->assertTrue($this->initializer->isLoaded());
     }
 
     public function testIsReturnTheFileStackCorrectly() {

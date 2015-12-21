@@ -19,14 +19,14 @@ class ClassLoaderInitializer {
     /**
      * @type bool
      */
-    protected static $isLoaded = FALSE;
+    protected $isLoaded = FALSE;
 
     /**
      * The files that loaded during the initialization phase
      *
      * @type array
      */
-    public static $files = [
+    protected static $files = [
         'Modules' . DIRECTORY_SEPARATOR . 'ClassLoaderModuleInterface.php',
         'Modules' . DIRECTORY_SEPARATOR . 'AbstractClassLoaderModule.php',
         'Exception' . DIRECTORY_SEPARATOR . 'ModuleException.php',
@@ -40,12 +40,21 @@ class ClassLoaderInitializer {
      *
      * @param $additionalFile
      */
-    public static function extend($additionalFile) {
-        if(self::$isLoaded === TRUE) {
+    public function extend($additionalFile) {
+        if($this->isLoaded === TRUE) {
             trigger_error('The initializer is loaded, so you cannot extend a loaded initializer!', E_USER_NOTICE);
         }
 
         self::$files = array_merge(self::$files, (array) $additionalFile);
+    }
+
+    /**
+     * Determines that the current instance of the initializer is loaded or not
+     *
+     * @return bool
+     */
+    public function isLoaded() {
+        return (bool) $this->isLoaded;
     }
 
     /**
@@ -62,8 +71,8 @@ class ClassLoaderInitializer {
      *
      * @return void
      */
-    public static function load() {
-        if(self::$isLoaded === TRUE) {
+    public function load() {
+        if($this->isLoaded === TRUE) {
             trigger_error("Unable to load ClassLoader because its already loaded!", E_USER_NOTICE);
         }
 
@@ -76,7 +85,7 @@ class ClassLoaderInitializer {
             include_once $fileAbsolute;
         }
 
-        self::$isLoaded = TRUE;
+        $this->isLoaded = TRUE;
     }
 
 }

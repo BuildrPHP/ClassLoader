@@ -241,10 +241,21 @@
             <fileset dir="${project.basedir}/build/BuildrStandard" />
         </copy>
 
+        <!-- Determines phpcs report type by build system -->
+        <if>
+            <equals arg1="BUILD_SYSTEM" arg2="${runMode}" />
+            <then>
+                <property name="phpcs.report.type" value="checkstyle" />
+            </then>
+
+            <else>
+                <property name="phpcs.report.type" value="source" />
+            </else>
+        </if>
+
         <!-- Execute process -->
         <exec passthru="true" executable="${toolsdir}phpcs${binaryExtension}">
-            <arg value="--report=source" />
-            <arg value="--report=checkstyle" />
+            <arg value="--report=${phpcs.report.type}" />
             <arg value="--report-file=${buildOutputPath}/logs/checkstyle.xml" />
             <arg value="--standard=BuildrStandard" />
             <arg value="-p" />

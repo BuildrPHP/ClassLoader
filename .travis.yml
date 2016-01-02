@@ -1,7 +1,7 @@
 language: php
 
 git:
-  submodules: false
+  submodules: true
 
 cache:
   directories:

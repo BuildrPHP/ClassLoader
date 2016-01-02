@@ -234,13 +234,6 @@
     <target name="phpcs"
             description="Perform coding standard verification using PHP-CodeSniffer">
 
-        <!-- Copying the standard definition to PHP-CS -->
-        <mkdir dir="${project.basedir}/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/BuildrStandard" />
-
-        <copy todir="${project.basedir}/vendor/squizlabs/php_codesniffer/CodeSniffer/Standards/BuildrStandard">
-            <fileset dir="${project.basedir}/build/BuildrStandard" />
-        </copy>
-
         <!-- Determines phpcs report type by build system -->
         <if>
             <equals arg1="BUILD_SYSTEM" arg2="${runMode}" />
@@ -253,11 +246,15 @@
             </else>
         </if>
 
+        <exec passthru="true" executable="${toolsdir}phpcs${binaryExtension}">
+            <arg line="--config-set installed_paths ${project.basedir}\codingStandard\standard"/>
+        </exec>
+
         <!-- Execute process -->
         <exec passthru="true" executable="${toolsdir}phpcs${binaryExtension}">
             <arg value="--report=${phpcs.report.type}" />
             <arg value="--report-file=${buildOutputPath}/logs/checkstyle.xml" />
-            <arg value="--standard=BuildrStandard" />
+            <arg value="--standard=BuildR" />
             <arg value="-p" />
             <arg path="${project.basedir}/src" />
         </exec>

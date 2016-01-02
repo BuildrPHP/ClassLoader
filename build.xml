@@ -247,7 +247,7 @@
         </if>
 
         <exec passthru="true" executable="${toolsdir}phpcs${binaryExtension}">
-            <arg line="--config-set installed_paths ${project.basedir}\codingStandard\standard"/>
+            <arg line="--config-set installed_paths '${project.basedir}/codingStandard/standard'"/>
         </exec>
 
         <!-- Execute process -->

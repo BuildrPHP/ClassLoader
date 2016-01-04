@@ -1,7 +1,7 @@
 language: php
 
 git:
-  submodules: true
+  submodules: false
 
 cache:
   directories:
@@ -14,8 +14,9 @@ php:
 
 before_install:
   - sudo apt-get update -qq
+  - git submodule update --init --recursive
   - composer self-update
   - composer install
 
 script:
- - ./vendor/bin/phing -f build.xml travis
+ - ./vendor/bin/phing -f buildTools/build.xml travis

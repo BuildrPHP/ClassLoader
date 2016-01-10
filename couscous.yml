@@ -1,0 +1,56 @@
+template:
+    url: git://github.com/CouscousPHP/Template-Dark.git
+    index: index.md
+
+exclude:
+    - vendor
+    - buildTools
+
+github:
+    user: BuildRPHP
+    repo: ClassLoader
+
+title: BuildR
+subTitle: Class Loader.
+
+menu:
+    sections:
+        main:
+            name: Getting Started
+            items:
+                home:
+                    text: Introduction
+                    relativeUrl: index.html
+                installation:
+                    text: Installation
+                    relativeUrl: doc/installation.html
+                documentation:
+                    text: Documentation
+                    relativeUrl: doc/documentation.html
+        modules:
+            name: Modules
+            items:
+                PSR0:
+                    text: PSR-0
+                    relativeUrl: doc/module-psr0.html
+                PSR4:
+                    text: PSR-4
+                    relativeUrl: doc/module-psr4.html
+                map:
+                    text: Class Map
+                    relativeUrl: doc/module-map.html
+                pear:
+                    text: PEAR
+                    relativeUrl: doc/module-pear.html
+                transformable:
+                    text: Transformable
+                    relativeUrl: doc/module-transformable.html
+        others:
+            name: Others
+            items:
+                api:
+                    text: API Documentation
+                    relativeUrl: doc/api-doc.html
+                testing:
+                  text: Testing
+                  relativeUrl: doc/testing.html

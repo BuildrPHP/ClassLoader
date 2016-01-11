@@ -11,3 +11,6 @@ composer.lock
 # Build Process output files
 build/output/*
 
+# Couscous generator preview files
+.couscous/
+

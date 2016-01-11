@@ -1,3 +1,7 @@
+---
+currentMenu: PSR4
+---
+
 # PSR-4 Module
 
 ## More Details

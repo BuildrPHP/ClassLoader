@@ -1,3 +1,7 @@
+---
+currentMenu: documentation
+---
+
 # Documentation
 
 ## Initializing

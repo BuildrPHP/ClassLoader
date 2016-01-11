@@ -1,3 +1,7 @@
+---
+currentMenu: PSR0
+---
+
 # PSR-0 Module
 
 ## More Details

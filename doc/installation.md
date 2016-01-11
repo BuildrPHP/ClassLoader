@@ -1,3 +1,7 @@
+---
+currentMenu: installation
+---
+
 # Installation
 
 ## With composer

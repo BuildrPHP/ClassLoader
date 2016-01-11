@@ -79,6 +79,14 @@ class PEARClassLoaderModule extends AbstractClassLoaderModule {
         return FALSE;
     }
 
+    /**
+     * Register a new prefix in this module
+     *
+     * @param string $prefix
+     * @param string $basePath
+     *
+     * @throws \BuildR\ClassLoader\Modules\PEAR\PEARModuleException
+     */
     public function registerPrefix($prefix, $basePath) {
         if($this->prefixIsRegistered($prefix)) {
             throw PEARModuleException::prefixOccupied($prefix);

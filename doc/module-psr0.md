@@ -1,5 +1,6 @@
 ---
 currentMenu: PSR0
+baseUrl: ..
 ---
 
 # PSR-0 Module

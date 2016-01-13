@@ -1,5 +1,6 @@
 ---
 currentMenu: map
+baseUrl: ..
 ---
 
 # ClassMap Module

@@ -1,5 +1,6 @@
 ---
 currentMenu: pear
+baseUrl: ..
 ---
 
 # PEAR Module

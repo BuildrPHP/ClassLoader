@@ -11,7 +11,8 @@ github:
     repo: ClassLoader
 
 title: BuildR
-subTitle: Class Loader.
+subTitle: Class Loader
+baseUrl: .
 
 menu:
     sections:

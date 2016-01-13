@@ -1,5 +1,6 @@
 ---
 currentMenu: api
+baseUrl: ..
 ---
 
 # API Documentation

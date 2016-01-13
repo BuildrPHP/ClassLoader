@@ -1,5 +1,6 @@
 ---
 currentMenu: installation
+baseUrl: ..
 ---
 
 # Installation

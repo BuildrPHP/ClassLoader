@@ -1,5 +1,6 @@
 ---
 currentMenu: documentation
+baseUrl: ..
 ---
 
 # Documentation

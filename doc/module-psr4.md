@@ -1,5 +1,6 @@
 ---
 currentMenu: PSR4
+baseUrl: ..
 ---
 
 # PSR-4 Module

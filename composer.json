@@ -13,7 +13,7 @@
   "support": {
     "issues": "http://project.zolli.hu",
     "source": "http://project.zolli.hu/diffusion/CCLASSLOADER/",
-    "docs": "http://docs.buildr-framework.io/classloader"
+    "docs": "https://docs.buildr-framework.io/class_loader"
   },
   "description": "BuildR Framework Class Loader Component",
   "keywords": [

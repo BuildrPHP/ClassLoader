@@ -5,6 +5,6 @@ baseUrl: ..
 
 # API Documentation
 
-The full API documentation is generated on every build.
+The API documentation is generated on every commit. This link represents the latest API of this library:
 
-[API Documentation](http://docs.buildr-framework.io/classloader/api)
+[API Documentation](http://docs.buildr-framework.io/class_loader_api)

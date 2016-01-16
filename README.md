@@ -1,97 +1,22 @@
 [![Build Status](http://ci.zolli.hu/view/Components/job/Class%20Loader/badge/icon)](http://ci.zolli.hu/view/Components/job/Class%20Loader/)
+[![Build Stability](http://status.buildr-framework.io/buildstatus/status_modules.php?jobName=Class%20Loader&type=stability)](http://ci.zolli.hu/job/Class%20Loader/)
 [![Code Coverage](https://scrutinizer-ci.com/g/BuildrPHP/ClassLoader/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/BuildrPHP/ClassLoader/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/BuildrPHP/ClassLoader/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/BuildrPHP/ClassLoader/?branch=master)
+[![Test Results](http://status.buildr-framework.io/buildstatus/status_modules.php?jobName=Class%20Loader&type=tests)](http://ci.zolli.hu/job/Class%20Loader/)
+[![CRAP Report](http://status.buildr-framework.io/buildstatus/status_modules.php?jobName=Class%20Loader&type=crap)](http://ci.zolli.hu/job/Class%20Loader/)
 [![Dependency Status](https://www.versioneye.com/user/projects/56772d5d107997003000130f/badge.svg?style=flat)](https://www.versioneye.com/user/projects/56772d5d107997003000130f)
 [![PHP7 Status](https://img.shields.io/badge/PHP7-tested-8892BF.svg)](https://github.com/BuildrPHP/ClassLoader)
 
 # BuildR - Class Loader
 ### Highly experimental PHP framework
 
-## Installation
+## Documentation
 
-### With Composer
+Documentation and API documentation is generated on every build. Browse the bleeding-edge documentations here:
 
-```
-composer require buildr/classloader
-```
+[Class Loader Documentation](https://docs.buildr-framework.io/class_loader/)
 
-### Manual Loading
-
-This package is suitable without Composer or other auto-loading mechanism. Use the internal loader to load all class that this
-package needs to be functioning.
-
-```php
-//Include the loader initializer
-include_once './src/ClassLoaderInitializer.php';
-
-//Load all classes
-\BuildR\ClassLoader\ClassLoaderInitializer::load();
-
-//Register the class loader namespace
-$loader = ClassLoader::create();
-
-/** @type \BuildR\ClassLoader\Modules\PSR4\PSR4ClassLoaderModule $module */
-$PSR4Module = $loader->loadModule(
-    __DIR__ . DIRECTORY_SEPARATOR . '../../src/Modules/PSR4/PSR4ClassLoaderModule.php',
-    \BuildR\ClassLoader\Modules\PSR4\PSR4ClassLoaderModule::class
-);
-
-$PSR4Module->registerNamespace('BuildR\\ClassLoader\\', __DIR__ . '/src');
-```
-
-## Main concept
-
-The main concept behind this package that able to handle multiple auto-loading standards using class loader modules. These modules are representing auto-loading standards, like PSR-0, PSR-4, PEAR, etc... 
-
-Registered modules are sorted by its priority, and this really speed up `spl_autoload_call()` calls, and this way only one class loader needs to be registered to `spl_autoload` queue.
-
-### Priority system
-
-Modules have default priorities that determines the order when its called. Lower number, means higher priority. When you loading a module, and the module default priority is occupied in the class loader, the loader will automatically try to lower (increase) the priority of the module, and its will be retried fot 5 times, to find an empty spot.
-
-## Usage
-
-### Getting the Class Loader
-
-The `ClassLoader` is the main component of this package, this used to register modules, and getting registered modules to work with.
-
-Use the `ClassLoader::create()` method to create an instance from the class loader and register the created instance in `spl_autoload` queue, and returns the created instance.
-```php
-$classLoader = \BuildR\ClassLoader\ClassLoader::create();
-```
-
-### Using Modules
-
-Because this module not need any auto-load mechanism, you need 2 parameter to load a module, the first is the module file absolute location. And the second is the module fully qualified class name.
-
-All modules have default priority, but you can optionally pass a third parameter that overrides the module default priority.
-
-```php
-$psr4Module = $classLoader->loadModule(
-    __DIR__ . '/src/Modules/PSR4ClassLoaderModule.php', 
-    \BuildR\ClassLoader\Modules\PSR4ClassLoaderModule::class,
-    20
-);
-```
-When the registration is complete the modules `ClassLoaderModuleInterface::onRegistered()` method will be called and a new instance from the module is returned. 
-
-This instance is used to configuring the module, e.g. registering namespaces, class maps etc...
-
-### Retrieving modules
-
-Modules will be retrieved any time by calling the class loader `getModuleByName($moduleName, $registeredPriority)` method. Each module have a unique, specific name. The modules have a static method (`ClassLoaderModuleInterface::getName()`) to retrieve the module name.
-
-### Un-registering modules
-
-Modules can be removed from the loader stack by calling the loader (`ClassLoader::removeModuleByName($moduleName, $registeredPriority)`) method.
-
-When removing a module the stack will be re-sorted.
-
-## API Documentation
-
-API documentation is generated by Our Build Service every commit. Browse the bleeding-edge documentation here:
-
-[Class Loader API Documentation](http://ci.zolli.hu/job/Class%20Loader/Documentation/)
+You can also download all build documentation separately on [Build system](https://ci.zolli.hu/job/Class%20Loader/).
 
 ## ToDo
 
@@ -104,11 +29,11 @@ API documentation is generated by Our Build Service every commit. Browse the ble
 
 ## Contribution
 
-For contribution please refer our [Contribution Guide](https://raw.githubusercontent.com/Zolli/BuildR/master/LICENSE.md) Repository.
+For contribution please refer our [Contribution Guide](https://github.com/BuildrPHP/Coding-Standard) Repository.
 
 ## License
 
-BuildR and its components are licensed under GPL v3 ([Read](https://raw.githubusercontent.com/Zolli/BuildR/master/LICENSE.md))
+BuildR and its components are licensed under GPL v3 ([Read](https://raw.githubusercontent.com/BuildrPHP/ClassLoader/master/LICENSE.md))
 [![License image](http://gplv3.fsf.org/gplv3-88x31.png)]()
 
 ## Thanks

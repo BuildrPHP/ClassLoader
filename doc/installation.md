@@ -7,14 +7,20 @@ baseUrl: ..
 
 ## With composer
 
-Simply add this project to your `composer.json` and you good to go.
+Run the following command in your project root directory:
+
+```bash
+$ composer require buildr/classloader:1.1.*
+```
+
+Or, simply add this project to your `composer.json` and you good to go.
 
 ```json
-    {
-      "require": {
-        "buildr/classloader": "1.1.*"
-      }
-    }
+{
+  "require": {
+    "buildr/classloader": "1.1.*"
+  }
+}
 ```
 
 ## Self Loading

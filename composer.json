@@ -6,14 +6,14 @@
     {
       "name": "Zoltán Borsos",
       "email": "zolli07@gmail.com",
-      "homepage": "http://zolli.hu",
+      "homepage": "https://zolli.hu",
       "role": "Developer"
     }
   ],
   "support": {
-    "issues": "http://project.zolli.hu",
-    "source": "http://project.zolli.hu/diffusion/CCLASSLOADER/",
-    "docs": "https://docs.buildr-framework.io/class_loader"
+    "issues": "https://project.zolli.hu",
+    "source": "https://code.zolli.hu/projects/BC/repos/classloader/browse",
+    "docs": "https://docs.zolli.hu/display/BCCL"
   },
   "description": "BuildR Framework Class Loader Component",
   "keywords": [

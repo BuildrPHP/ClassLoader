@@ -8,15 +8,18 @@
 [![PHP7 Status](https://img.shields.io/badge/PHP7-tested-8892BF.svg)](https://github.com/BuildrPHP/ClassLoader)
 
 # BuildR - Class Loader
-### Highly experimental PHP framework
 
-## Documentation
+## Installation
 
-Documentation and API documentation is generated on every build. Browse the bleeding-edge documentations here:
+### With Composer
 
-[Class Loader Documentation](https://docs.zolli.hu/display/BCCL)
+```
+composer require buildr/classloader
+```
 
-You can also download all build documentation separately on [Build system](https://ci.zolli.hu/job/ClassLoader/).
+# Documentation
+
+[ClassLoader Documentation](https://docs.zolli.hu/display/BCCL)
 
 ## ToDo
 

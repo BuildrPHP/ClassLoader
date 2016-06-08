@@ -1,7 +1,7 @@
 {
   "name": "buildr/classloader",
   "type": "library",
-  "homepage": "http://buildr-framework.io",
+  "homepage": "https://buildr-framework.io",
   "authors": [
     {
       "name": "Zoltán Borsos",
@@ -11,7 +11,7 @@
     }
   ],
   "support": {
-    "issues": "https://project.zolli.hu",
+    "issues": "https://project.zolli.hu/projects/BC/summary",
     "source": "https://code.zolli.hu/projects/BC/repos/classloader/browse",
     "docs": "https://docs.zolli.hu/display/BCCL"
   },
